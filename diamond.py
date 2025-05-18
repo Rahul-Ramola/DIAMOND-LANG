@@ -1,0 +1,176 @@
+from lexer import tokenize
+
+functions = {}
+loop_context = {
+    'break': False,
+    'continue': False,
+    'return_value': None
+}
+
+current_scope = None
+
+class Scope:
+    def __init__(self, parent=None):
+        self.variables = {}
+        self.parent = parent
+        self.return_value = None
+
+    def get(self, name):
+        if name in self.variables:
+            return self.variables[name]
+        if self.parent:
+            return self.parent.get(name)
+        return globals().get(name)
+
+    def set(self, name, value):
+        self.variables[name] = value
+
+def evaluate_expression(expr, scope, lineno=None):
+    if isinstance(expr, str):
+        if expr.startswith("bula dost"):
+            func_name = expr[9:expr.find("(")].strip()
+            args_str = expr[expr.find("(")+1:expr.find(")")].strip()
+            args = [arg.strip() for arg in args_str.split(",")] if args_str else []
+            return execute_token(("FUNC_CALL", func_name, args, lineno))
+        try:
+            return eval(expr, globals(), scope.variables)
+        except Exception as e:
+            print(f"Line {lineno if lineno else '?'}: Expression Error: {e} => '{expr}'")
+            return expr
+    return expr
+
+def execute_token(token, tokens=None, index=None):
+    global current_scope, functions
+
+    try:
+        type_ = token[0]
+        args = token[1:-1] if len(token) > 2 else token[1:]
+        lineno = token[-1] if len(token) > 2 else None
+
+        if type_ == "PRINT":
+            value = evaluate_expression(args[0], current_scope, lineno)
+            print(value)
+
+        elif type_ == "VAR_DECLARATION":
+            var_name = args[0]
+            value = evaluate_expression(args[1], current_scope, lineno) if args[1] is not None else None
+            current_scope.set(var_name, value)
+
+        elif type_ == "FUNC_DEF":
+            if tokens and index is not None:
+                func_name, params = args
+                body = []
+                i = index + 1
+                while i < len(tokens) and tokens[i][0] != "END":
+                    body.append(tokens[i])
+                    i += 1
+                functions[func_name] = (params, body)
+                return i + 1
+
+        elif type_ == "FUNC_CALL":
+            func_name, call_args = args
+            if func_name not in functions:
+                raise Exception(f"Function '{func_name}' is not defined.")
+            params, body = functions[func_name]
+            old_scope = current_scope
+            new_scope = Scope(old_scope)
+            current_scope = new_scope
+
+            for param, arg in zip(params, call_args):
+                value = evaluate_expression(arg, old_scope, lineno)
+                current_scope.set(param, value)
+
+            for t in body:
+                result = execute_token(t)
+                if current_scope.return_value is not None:
+                    break
+
+            result = current_scope.return_value
+            current_scope = old_scope
+            return result
+
+        elif type_ == "RETURN":
+            value = evaluate_expression(args[0], current_scope, lineno) if args[0] else None
+            current_scope.return_value = value
+            return value
+
+        elif type_ == "IF":
+            condition = evaluate_expression(args[0], current_scope, lineno)
+            i = index + 1
+            if condition:
+                while i < len(tokens) and tokens[i][0] not in ("ELSE", "END"):
+                    execute_token(tokens[i])
+                    i += 1
+            else:
+                while i < len(tokens) and tokens[i][0] != "END":
+                    if tokens[i][0] == "ELSE":
+                        i += 1
+                        while i < len(tokens) and tokens[i][0] != "END":
+                            execute_token(tokens[i])
+                            i += 1
+                        break
+                    i += 1
+            return i
+
+        elif type_ == "WHILE":
+            i = index + 1
+            start = i
+            while i < len(tokens) and tokens[i][0] != "END":
+                i += 1
+            end = i
+            while evaluate_expression(args[0], current_scope, lineno):
+                j = start
+                while j < end:
+                    execute_token(tokens[j])
+                    j += 1
+            return end
+
+        elif type_ == "FOR":
+            var, start, end, step = args
+            start_val = int(evaluate_expression(start, current_scope, lineno))
+            end_val = int(evaluate_expression(end, current_scope, lineno))
+            step_val = int(evaluate_expression(step, current_scope, lineno))
+            i = index + 1
+            block_start = i
+            while i < len(tokens) and tokens[i][0] != "END":
+                i += 1
+            block_end = i
+            for v in range(start_val, end_val + 1, step_val):
+                current_scope.set(var, v)
+                j = block_start
+                while j < block_end:
+                    execute_token(tokens[j])
+                    j += 1
+            return block_end
+
+        elif type_ == "END":
+            return index
+
+    except Exception as e:
+        print(f"Line {lineno if lineno else '?'}: Execution Error at token {token}: {e}")
+        return index + 1
+
+def run(file_path):
+    global current_scope
+    current_scope = Scope()
+
+    with open(file_path, "r") as f:
+        code = f.read()
+
+    tokens = tokenize(code)
+    i = 0
+    while i < len(tokens):
+        if tokens[i][0] in ("FUNC_DEF", "IF", "WHILE", "FOR"):
+            result = execute_token(tokens[i], tokens, i)
+            i = result if result is not None else i + 1
+        else:
+            execute_token(tokens[i])
+            i += 1
+
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) > 1:
+        run(sys.argv[1])
+    else:
+        print("Please provide a Diamond language file to run.")
+        print("Usage: python diamond.py <filename.diamond>") 

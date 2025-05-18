@@ -1,0 +1,11 @@
+# This is a simple hello world program in Diamond language
+
+sun dost "Hello, World!"
+
+# Function definition example
+kaam dost greet(name)
+    sun dost "Hello, " + name + "!"
+bas dost
+
+# Function call
+bula dost greet("Diamond") 
