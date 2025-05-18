@@ -1,0 +1,123 @@
+ 1. Basic Print & Variables:
+
+mera dost x = 10
+mera dost y = 20
+
+sun dost x
+sun dost y
+sun dost x + y
+  
+ Output:
+  10
+  20
+  30
+
+
+ 2. Simple Function Definition & Call:
+
+kaam dost add(a, b)
+    wapas dost a + b
+bas dost
+
+sun dost bula dost add(3, 5)
+
+ Output:
+  8
+
+ 3. If-Else Control Flow:
+
+mera dost age = 18
+
+agar dost age >= 18
+    sun dost "You are an adult"
+warna dost
+    sun dost "You are a minor"
+bas dost
+
+ Output:
+  You are an adult
+
+ 4. While Loop:
+
+mera dost i = 1
+
+jab tak dost i <= 3
+    sun dost i
+    mera dost i = i + 1
+bas dost
+ 
+ Output:
+  1
+  2
+  3
+
+5. For Loop with Steps:
+
+ghum dost i se 1 tak 5 step 2
+    sun dost i
+bas dost
+
+ Output:
+  1
+  3
+  5
+
+6. Function with Inner Logic:
+
+kaam dost multiply(a, b)
+    mera dost result = a * b
+    wapas dost result
+bas dost
+
+sun dost bula dost multiply(4, 6)
+
+  Output:
+   24
+
+7. Nested Function Calls:
+
+kaam dost square(x)
+    wapas dost x * x
+bas dost
+
+kaam dost cube(x)
+    wapas dost x * bula dost square(x)
+bas dost
+
+sun dost bula dost cube(2)
+
+  Output:
+   8
+
+8. Function Returning Function Output:
+
+kaam dost greet(name)
+    wapas dost "Hello " + name
+bas dost
+
+sun dost bula dost greet("Priyanshu")
+
+ Output:
+  Hello Priyanshu
+
+9. Conditional Inside Loop:
+
+ghum dost i se 1 tak 5 step 1
+    agar dost i % 2 == 0
+        sun dost i + " is even"
+    warna dost
+        sun dost i + " is odd"
+    bas dost
+bas dost
+
+  Output:
+   1 is odd
+   2 is even
+   3 is odd
+   4 is even
+   5 is odd
+
+
+
+
+
