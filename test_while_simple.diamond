@@ -1,0 +1,6 @@
+# Simple while loop test
+mera dost x = 1
+jab tak dost x <= 3
+    sun dost x
+    x = x + 1
+bas dost 

@@ -70,7 +70,12 @@ def tokenize(code):
         elif line.startswith("bas dost"):
             tokens.append(("END", None, lineno))
 
+        elif "=" in line and not line.startswith("mera dost"):
+            var_name, value = line.split("=", 1)
+            tokens.append(("ASSIGNMENT", var_name.strip(), value.strip(), lineno))
+
+
         else:
             tokens.append(("UNKNOWN", line, lineno))
 
-    return tokens 
+    return tokens

@@ -1,0 +1,13 @@
+# Test while loop with counter
+mera dost counter = 1
+jab tak dost counter <= 5
+    sun dost "Counter value: " + counter
+    counter = counter + 1
+bas dost
+
+# Test while loop with condition
+mera dost x = 10
+jab tak dost x > 0
+    sun dost "x is: " + x
+    x = x - 2
+bas dost 

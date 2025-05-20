@@ -1,0 +1,6 @@
+# Test while loop with counter
+mera dost counter = 1
+jab tak dost counter <= 5
+    sun dost "Counter value: " + counter
+    counter = counter + 1
+bas dost 
