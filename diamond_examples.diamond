@@ -1,5 +1,0 @@
-mera dost counter = 1
-jab tak dost counter <= 5
-    sun dost "Counter: " + counter
-    counter = counter + 1
-bas dost

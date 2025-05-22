@@ -1,5 +1,5 @@
 from lexer import tokenize
-from interpreter import execute_token, Scope
+from diamond import execute_token, Scope
 
 print("💎 Diamond Lang REPL")
 print("Type `exit dost` to quit.\n")

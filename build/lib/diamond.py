@@ -1,5 +1,6 @@
 from lexer import tokenize
 from expression_parser import eval_expr
+import sys
 
 functions = {}
 loop_context = {
@@ -205,5 +206,12 @@ def run(file_path):
             execute_token(tokens[i], scope=scope)
             i += 1
 
+def main():
+    if len(sys.argv) != 2:
+        print("Usage: diamond <file.diamond>")
+        sys.exit(1)
+    file_path = sys.argv[1]
+    run(file_path)
+
 if __name__ == "__main__":
-    run("diamond_examples.diamond")
+    main()

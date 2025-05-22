@@ -1,0 +1,5 @@
+bana dost x = 5
+jab tak dost x > 0
+    likh dost x 
+    x = x - 1
+bas dost
