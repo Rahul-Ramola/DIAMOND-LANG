@@ -55,16 +55,13 @@ bas dost`}
       <ul>
         <li><code>agar dost (cond)</code></li>
         <li><code>nahi to dost (cond)</code></li>
-        <li><code>warna dost</code></li>
       </ul>
       <pre><code>
 {`bana dost x = 10
-agar dost (x < 5)
+agar dost x < 5
     bata dost "small"
-nahi to dost (x < 15)
-    bata dost "medium"
-warna dost
-    bata dost "large"
+nahi to dost 
+      bata dost "large"
 bas dost`}
       </code></pre>
 

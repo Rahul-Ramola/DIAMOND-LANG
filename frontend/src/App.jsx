@@ -4,6 +4,7 @@ import Editor from "@monaco-editor/react";
 import "./App.css";
 import * as monaco from "monaco-editor";
 import Documentation from "./Documentation";
+import logo from "./diamond.png";
 
 function App() {
   const [code, setCode] = useState("");
@@ -72,7 +73,7 @@ function App() {
   return (
     <div className="container">
       <div className="header">
-          <img src="/diamond.png" alt="Diamond Lang Logo" className="logo" />
+          <img src={logo} alt="Diamond Lang Logo" className="logo" />
       </div>
       <h1 className="title">Playground</h1>
       <div className="button-bar">
